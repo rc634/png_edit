@@ -120,13 +120,13 @@ class Picture:
 					self.b[i,j] = 0.
 					self.a[i,j] = 0.
 
-	def blend(self,target1,target2,blend):
+	def blend(self,target1,target2,blend1, blend2):
 		for i in range(self.w) :
 			for j in range(self.h) :
-				self.r[i,j] = target1.r[i,j] * (1.-blend) + target2.r[i,j] * blend
-				self.g[i,j] = target1.g[i,j] * (1.-blend) + target2.g[i,j] * blend
-				self.b[i,j] = target1.b[i,j] * (1.-blend) + target2.b[i,j] * blend
-				self.a[i,j] = target1.a[i,j] * (1.-blend) + target2.a[i,j] * blend
+				self.r[i,j] = target1.r[i,j] * blend1 + (target2.r[i,j]-0.5) * blend2 
+				self.g[i,j] = target1.g[i,j] * blend1 + (target2.g[i,j]-0.5) * blend2
+				self.b[i,j] = target1.b[i,j] * blend1 + (target2.b[i,j]-0.5) * blend2
+				self.a[i,j] = target1.a[i,j] * blend1 + (target2.a[i,j]-0.5) * blend2
 
 
 
@@ -138,11 +138,11 @@ lizard.show()
 
 squarerock = Picture('output_images/square_rock.png',True,(1024,1024))
 squarerock.recast_from_pixel(rock,10,700,10,700)
-square.brightness_mult(0.7)
+squarerock.brightness_mult(0.7)
 squarerock.show()
 
 hendrock = Picture(outfile, True, (1024,1024))
-hendrock.blend(lizard,squarerock,0.5)
+hendrock.blend(lizard,squarerock,1.,2.0)
 hendrock.show()
 hendrock.save("ouput_images/hendrock.png")
 
@@ -158,3 +158,5 @@ hendrock.save("ouput_images/hendrock.png")
 # resize
 # colour mapping func
 # safeguard from colour overdrive over 1.0 or 255
+# code up stats like average colours and deviations to help with mixes and amsks
+# code up compression or a sigmoid function
